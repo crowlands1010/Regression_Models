@@ -1,0 +1,73 @@
+---
+title: "Regression Models: mtcars"
+author: "Courtney Rowlands"
+output: 
+  html_document:
+    keep_md: yes
+pdf_document: default
+---
+<!-- rmarkdown v1 -->
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Regression Models Course Project
+
+### Executive Summary: 
+The purpose of this assignment is to emulate working for Motor Trend, a magazine about the auto industry. By analyzing the dataset of a collection of cars, the company is interestedin exploring the relationship between a set of variables and the MPG. The two questions they are interested in answered are: 1. Is the automatic or manual transmission better for MPG, and 2. Quantifythe MPG difference between automatic and manual transmissions.
+
+```{r setLibraries,echo=FALSE}
+library(ggplot2)
+library(knitr)
+library(datasets)
+```
+```{r mtcarsData}
+# Read Data
+data(mtcars)
+
+```
+
+```{r mtcarsSummary}
+# Exploratory Analyses
+dataAnalysis <- function(mtcars)
+  {
+    head(mtcars)
+    dim(mtcars)
+    str(mtcars)
+    summary(mtcars)
+  }
+
+dataAnalysis(mtcars)
+```
+```{r residualPlots}
+# linear model -- includes residual 
+par(mfrow = c(2, 2))
+fitMPG <- lm(mpg ~ .,data=mtcars); 
+plot(fitMPG)
+```
+
+```{r linearRegression}
+# Linear Testing
+plot(mtcars$mpg,mtcars$am,xlab="MPG",ylab="Transmission Type",main="Manual vs. Automatic",
+     col="darkblue",cex=1.1,pch=21,frame=F)
+lm1 <- lm(mtcars$am ~ mtcars$mpg)
+abline(lm1,col="darkgreen",lwd=3)
+
+legend('bottomright',c("0.0 = Automatic","1.0 = Manual"))
+```
+
+```{r boxPlot}
+# boxplot
+boxplot(mpg ~ am,data=mtcars,fill="darkblue",col="lightblue"
+        ,xlab="Transmission Type",ylab="MPG",frame=F)
+legend('topleft',c("0: Automatic","1: Manual"))
+
+lmAuto <- lm(mtcars$mpg ~ mtcars$am)
+summary(lmAuto)
+
+t.test(mpg ~ am,data=mtcars)
+
+```
+
+### Summary
+Based on these tests, automatic transmission is better for your vehicle than automatic. Other factors could also cause these differences, but the average mpg differences between automatic and manual transmission are 17.15 for automatic and 24.40 for manual. If I were to test other factors in this analses, we may find that vehicle weight, fuel efficiency, and driving style may impact these results. The only thing I can conclude with high confidence is that there is a significant difference between miles per gallon between Automatic and Manual transmission types. (This data doesn't account for hybrid and alternative fuel types, or electric vehicles)
+  
